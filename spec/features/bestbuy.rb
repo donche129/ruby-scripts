@@ -24,7 +24,7 @@ def wait_for_stock
   sold_out = true
   while sold_out
     begin
-      page.should have_text('Sold Out')
+      page.should have_text('Add to Cart')
       sold_out = false
       Log.info 'Alert! PS5 now in stock!'
     rescue Exception
