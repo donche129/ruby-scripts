@@ -3,7 +3,7 @@
 
 require 'spec_helper'
 
-feature "Check PS5 availability on Best Buy" do
+feature "Check PS5 availability on GameStop" do
 
   before(:all) do
     if ENV["ALERTEMAIL"] == '' || ENV["ALERTPASS"] == ''
@@ -11,13 +11,13 @@ feature "Check PS5 availability on Best Buy" do
       @email_info_found = false
     end
 
-    if ENV["BBEMAIL"] == '' || ENV["BBPASS"] == ''
+    if ENV["GSEMAIL"] == '' || ENV["GSPASS"] == ''
       Log.info 'No login info was passed on execution, will not sign in to check out.'
       @login_info_found = false
     end
   end
 
-  scenario "Bestbuy" do
+  scenario "GameStop" do
     open_site
     wait_for_stock
     proceed_to_checkout
@@ -28,9 +28,9 @@ end
 
 def open_site
   begin
-    visit 'https://www.bestbuy.com/site/marvels-spider-man-miles-morales-standard-launch-edition-playstation-5/6430146.p?skuId=6430146'
-    # visit 'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
-    # page.should have_text 'Sony - PlayStation 5 Console'
+    visit 'https://www.gamestop.com/video-games/playstation-5/products/marvels-spider-man-miles-morales-ultimate-edition---playstation-5/11108812.html?condition=New'
+    # visit 'https://www.gamestop.com/consoles-hardware/playstation-5/consoles/products/sony-playstation-5-console/11108140.html?condition=New'
+    # page.should have_text 'Sony PlayStation 5 Console'
   rescue Exception => e
     Log.error 'Trouble reaching PS5 product page. Page may have changed content or URL.'
     fail 'Could not load PS5 page.'
@@ -41,14 +41,14 @@ def wait_for_stock
   sold_out = true
   while sold_out
     begin
-      page.should have_text('Add to Cart')
+      page.should have_css('[class^="add-to-cart-buttons"]', :text => 'ADD TO CART')
       Log.info 'Alert! PS5 now in stock! Adding to cart...'
-      find_button('Add to Cart').click
-      page.should have_css('[class="cart-icon"]', :text => '1')
+      find('[class^="add-to-cart-buttons"]', :text => 'ADD TO CART').click
+      page.should have_css('[class^="minicart-quantity"]', :text => '1')
       sold_out = false
       Log.info 'PS5 added to cart.'
     rescue Exception
-      page.should have_text('Sold Out')
+      page.should have_css('[class^="add-to-cart-buttons"]', :text => 'NOT AVAILABLE')
       Log.info 'PS5 stock is currently sold out.'
       sleep 60
       retry
@@ -60,12 +60,11 @@ def proceed_to_checkout
   if @login_info_found == false
     Log.info 'No login info found. Will not check out.'
   else
-    visit 'https://www.bestbuy.com/cart'
-    find('[class="availability__fulfillment"]', :text => 'FREE Shipping').find('[class^="availability__radio"]').click
-    find_button('Checkout').click
-    find('input[type="email"]').set(ENV["BBEMAIL"])
-    find('input[type="password"]').set(ENV["BBPASS"])
-    find_button('Sign In').click
+    visit 'https://www.gamestop.com/cart/'
+    find('[class="checkout-btn-text-mobile"]', :text => 'PROCEED TO CHECKOUT').click
+    find('input[type="email"]').set(ENV["GSEMAIL"])
+    find('input[type="password"]').set(ENV["GSPASS"])
+    find('[class*="sign-in-submit"]', :text => 'SIGN IN').click
     Log.info 'PS5 ready to checkout!'
   end
 end
@@ -77,7 +76,7 @@ def alert_user
     Mail.deliver do
          to 'donaldcherestal@gmail.com'
        from 'donaldcherestal@gmail.com'
-    subject 'PS5 added to Best Buy cart'
+    subject 'PS5 added to GameStop cart'
        body 'Ready to checkout! Hurry!'
     end
     Log.info 'Alert email sent.'

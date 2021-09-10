@@ -41,6 +41,9 @@ ENV["ALERTPASS"] ||= ''
 ENV["BBEMAIL"] ||= ''
 ENV["BBPASS"] ||= ''
 
+ENV["GSEMAIL"] ||= ''
+ENV["GSPASS"] ||= ''
+
 mail_options = { :address              => "smtp.gmail.com",
             :port                 => 587,
             :user_name            => ENV["ALERTEMAIL"],
