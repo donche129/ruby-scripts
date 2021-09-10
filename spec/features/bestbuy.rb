@@ -28,9 +28,8 @@ end
 
 def open_site
   begin
-    visit 'https://www.bestbuy.com/site/marvels-spider-man-miles-morales-standard-launch-edition-playstation-5/6430146.p?skuId=6430146'
-    # visit 'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
-    # page.should have_text 'Sony - PlayStation 5 Console'
+    visit 'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
+    page.should have_text 'Sony - PlayStation 5 Console'
   rescue Exception => e
     Log.error 'Trouble reaching PS5 product page. Page may have changed content or URL.'
     fail 'Could not load PS5 page.'

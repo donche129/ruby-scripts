@@ -28,9 +28,8 @@ end
 
 def open_site
   begin
-    visit 'https://www.gamestop.com/video-games/playstation-5/products/marvels-spider-man-miles-morales-ultimate-edition---playstation-5/11108812.html?condition=New'
-    # visit 'https://www.gamestop.com/consoles-hardware/playstation-5/consoles/products/sony-playstation-5-console/11108140.html?condition=New'
-    # page.should have_text 'Sony PlayStation 5 Console'
+    visit 'https://www.gamestop.com/consoles-hardware/playstation-5/consoles/products/sony-playstation-5-console/11108140.html?condition=New'
+    page.should have_text 'Sony PlayStation 5 Console'
   rescue Exception => e
     Log.error 'Trouble reaching PS5 product page. Page may have changed content or URL.'
     fail 'Could not load PS5 page.'
