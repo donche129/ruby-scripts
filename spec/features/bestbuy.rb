@@ -1,4 +1,3 @@
-# TO DO: sign in before adding to cart
 # TO DO: add screenshots
 
 require 'spec_helper'
@@ -18,7 +17,8 @@ feature "Check PS5 availability on Best Buy" do
   end
 
   scenario "Bestbuy" do
-    open_site
+    sign_in
+    find_ps5
     wait_for_stock
     proceed_to_checkout
     alert_user
@@ -26,8 +26,17 @@ feature "Check PS5 availability on Best Buy" do
 
 end
 
-def open_site
+def sign_in
+  visit 'https://www.bestbuy.com/login'
+  find('input[type="email"]').set(ENV["BBEMAIL"])
+  find('input[type="password"]').set(ENV["BBPASS"])
+  find_button('Sign In').click
+  sleep 10
+end
+
+def find_ps5
   begin
+    # visit 'https://www.bestbuy.com/site/marvels-spider-man-miles-morales-standard-launch-edition-playstation-5/6430146.p?skuId=6430146'
     visit 'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
     page.should have_text 'Sony - PlayStation 5 Console'
   rescue Exception => e
@@ -62,9 +71,6 @@ def proceed_to_checkout
     visit 'https://www.bestbuy.com/cart'
     find('[class="availability__fulfillment"]', :text => 'FREE Shipping').find('[class^="availability__radio"]').click
     find_button('Checkout').click
-    find('input[type="email"]').set(ENV["BBEMAIL"])
-    find('input[type="password"]').set(ENV["BBPASS"])
-    find_button('Sign In').click
     Log.info 'PS5 ready to checkout!'
   end
 end
