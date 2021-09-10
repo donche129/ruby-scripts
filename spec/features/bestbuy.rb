@@ -69,5 +69,8 @@ def alert_user
     end
     Log.info 'Alert email sent.'
   end
-  sleep 60
+  while true
+    Log.info 'Waiting for you to check out. Terminate the script when you\'re finished.'
+    sleep 600
+  end
 end
