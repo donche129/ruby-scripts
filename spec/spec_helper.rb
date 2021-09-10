@@ -20,6 +20,7 @@ require 'selenium-webdriver'
 require 'fileutils'
 require 'logger'
 require 'helper_functions'
+require 'mail'
 
 RSpec.configure do |config|
   config.order = 'default' # Run specs in default order
@@ -32,6 +33,23 @@ RSpec.configure do |config|
       page.save_screenshot
     end
   end
+end
+
+ENV["ALERTEMAIL"] ||= ''
+ENV["ALERTPASS"] ||= ''
+
+ENV["BBEMAIL"] ||= ''
+ENV["BBPASS"] ||= ''
+
+mail_options = { :address              => "smtp.gmail.com",
+            :port                 => 587,
+            :user_name            => ENV["ALERTEMAIL"],
+            :password             => ENV["ALERTPASS"],
+            :authentication       => 'plain',
+            :enable_starttls_auto => true  }
+
+Mail.defaults do
+  delivery_method :smtp, mail_options
 end
 
 Capybara.save_path = 'failure_assets'
