@@ -31,7 +31,7 @@ def sign_in
   find('input[type="email"]').set(ENV["GSEMAIL"])
   find('input[type="password"]').set(ENV["GSPASS"])
   find('[class*="sign-in-submit"]', :text => 'SIGN IN').click
-  sleep 10
+  sleep 10 # TO DO: check loading done function instead of sleep
 end
 
 def find_ps5
@@ -52,6 +52,7 @@ def wait_for_stock
       page.should have_css('[class^="add-to-cart-buttons"]', :text => 'ADD TO CART')
       Log.info 'Alert! PS5 now in stock! Adding to cart...'
       find('[class^="add-to-cart-buttons"]', :text => 'ADD TO CART').click
+      sleep 5 # TO DO: check loading done function instead of sleep
       page.should have_css('[class^="minicart-quantity"]', :text => '1')
       sold_out = false
       Log.info 'PS5 added to cart.'

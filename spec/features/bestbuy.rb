@@ -31,7 +31,7 @@ def sign_in
   find('input[type="email"]').set(ENV["BBEMAIL"])
   find('input[type="password"]').set(ENV["BBPASS"])
   find_button('Sign In').click
-  sleep 10
+  sleep 10 # TO DO: check loading done function instead of sleep
 end
 
 def find_ps5
@@ -52,6 +52,7 @@ def wait_for_stock
       page.should have_text('Add to Cart')
       Log.info 'Alert! PS5 now in stock! Adding to cart...'
       find_button('Add to Cart').click
+      sleep 5 # TO DO: check loading done function instead of sleep
       page.should have_css('[class="cart-icon"]', :text => '1')
       sold_out = false
       Log.info 'PS5 added to cart.'
